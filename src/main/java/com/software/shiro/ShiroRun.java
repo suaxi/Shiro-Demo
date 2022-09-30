@@ -23,10 +23,19 @@ public class ShiroRun {
         //创建token
         AuthenticationToken token = new UsernamePasswordToken("sunxiaochuan", "123");
 
-        //完成登录
         try {
+            //完成登录
             subject.login(token);
             System.out.println("登录成功");
+
+            //判断角色
+            System.out.println("是否拥有 [admin] 角色：" + subject.hasRole("admin"));
+
+            //判断权限
+            System.out.println("是否拥有 [user:select] 权限：" + subject.isPermitted("user:select"));
+            //无返回值
+            subject.checkPermission("user:add");
+
         } catch (UnknownAccountException e) {
             e.printStackTrace();
             System.out.println("用户不存在");
