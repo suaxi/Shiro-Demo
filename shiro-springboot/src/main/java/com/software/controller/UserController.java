@@ -11,6 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,11 +33,14 @@ public class UserController {
 
     @ApiOperation("登录")
     @GetMapping("/doLogin")
-    public String doLogin(String name, String password, HttpSession session) {
+    public String doLogin(@RequestParam("name") String name,
+                          @RequestParam("password") String password,
+                          @RequestParam(value = "rememberMe", defaultValue = "false") boolean rememberMe,
+                          HttpSession session) {
         //1.获取subject对象
         Subject subject = SecurityUtils.getSubject();
         //2.封装token
-        AuthenticationToken token = new UsernamePasswordToken(name, password);
+        AuthenticationToken token = new UsernamePasswordToken(name, password, rememberMe);
         try {
             //3.调用login方法进行登录认证
             subject.login(token);
@@ -46,6 +50,13 @@ public class UserController {
             e.printStackTrace();
             return "登录失败";
         }
+    }
+
+    @ApiOperation("记住我")
+    @GetMapping("/rememberMe")
+    public String rememberMe(HttpSession session) {
+        session.setAttribute("username", "rememberMe");
+        return "main";
     }
 
 }

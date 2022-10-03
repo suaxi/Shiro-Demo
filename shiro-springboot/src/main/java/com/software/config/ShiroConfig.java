@@ -1,8 +1,11 @@
 package com.software.config;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +42,30 @@ public class ShiroConfig {
 
         //4.将Realm存入SecurityManager对象
         securityManager.setRealm(myRealm);
+
+        //5.RememberMe
+        securityManager.setRememberMeManager(cookieRememberMeManager());
         return securityManager;
+    }
+
+    /**
+     * cookie管理对象
+     *
+     * @return
+     */
+    public CookieRememberMeManager cookieRememberMeManager() {
+        CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
+
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        //跨域
+        //simpleCookie.setDomain("xxx.com");
+        simpleCookie.setPath("/");
+        simpleCookie.setHttpOnly(true);
+        simpleCookie.setMaxAge(30 * 24 * 60 * 60);
+
+        rememberMeManager.setCookie(simpleCookie);
+        rememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
+        return rememberMeManager;
     }
 
     /**
@@ -54,9 +80,13 @@ public class ShiroConfig {
         definition.addPathDefinition("/webjars/**", "anon");
         definition.addPathDefinition("/swagger-resources/**", "anon");
         definition.addPathDefinition("/v2/**", "anon");
+
         definition.addPathDefinition("/user/doLogin", "anon");
         definition.addPathDefinition("/user/login", "anon");
+
         definition.addPathDefinition("/**", "authc");
+        //rememberMe
+        definition.addPathDefinition("/**", "user");
         return definition;
     }
 }
