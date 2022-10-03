@@ -5,8 +5,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.software.entity.User;
 import com.software.mapper.UserMapper;
 import com.software.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Wang Hao
@@ -23,5 +27,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().like(User::getName, name);
         return userMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public List<String> queryUserRoleListByUsername(String username) {
+        if (StringUtils.isNotBlank(username)) {
+            return userMapper.queryUserRoleListByUsername(username);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<String> queryPermissionListByRoleName(List<String> roleNames) {
+        if (roleNames != null && roleNames.size() > 0) {
+            return userMapper.queryPermissionListByRoleName(roleNames);
+        }
+        return null;
     }
 }

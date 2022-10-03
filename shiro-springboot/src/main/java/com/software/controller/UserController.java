@@ -7,11 +7,14 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -57,6 +60,22 @@ public class UserController {
     public String rememberMe(HttpSession session) {
         session.setAttribute("username", "rememberMe");
         return "main";
+    }
+
+    @ApiOperation("角色验证")
+    @RequiresRoles("admin")
+    @GetMapping("/hasRole")
+    @ResponseBody
+    public String hasRole() {
+        return "角色验证成功";
+    }
+
+    @ApiOperation("权限验证")
+    @RequiresPermissions({"user:select", "user:insert"})
+    @GetMapping("/hasPermission")
+    @ResponseBody
+    public String hasPermission() {
+        return "权限验证成功";
     }
 
 }

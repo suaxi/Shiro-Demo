@@ -72,6 +72,12 @@
             <artifactId>swagger-models</artifactId>
             <version>1.5.21</version>
         </dependency>
+
+        <!-- commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

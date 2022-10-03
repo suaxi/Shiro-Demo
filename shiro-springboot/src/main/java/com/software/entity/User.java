@@ -28,8 +28,4 @@ public class User implements Serializable {
     @TableField(value = "password")
     @ApiModelProperty(value = "密码")
     private String password;
-
-    @TableField(value = "role_id")
-    @ApiModelProperty(value = "角色id")
-    private Integer roleId;
 }
