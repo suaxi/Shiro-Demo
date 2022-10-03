@@ -76,14 +76,16 @@ public class ShiroConfig {
     @Bean
     public DefaultShiroFilterChainDefinition defaultShiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition definition = new DefaultShiroFilterChainDefinition();
+        //无需认证可访问的资源路径
         definition.addPathDefinition("/doc.html", "anon");
         definition.addPathDefinition("/webjars/**", "anon");
         definition.addPathDefinition("/swagger-resources/**", "anon");
         definition.addPathDefinition("/v2/**", "anon");
-
         definition.addPathDefinition("/user/doLogin", "anon");
         definition.addPathDefinition("/user/login", "anon");
-
+        //退出
+        definition.addPathDefinition("/logout", "logout");
+        //需进行认证才能访问的资源路径
         definition.addPathDefinition("/**", "authc");
         //rememberMe
         definition.addPathDefinition("/**", "user");
