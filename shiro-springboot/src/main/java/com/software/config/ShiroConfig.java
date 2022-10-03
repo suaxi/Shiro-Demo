@@ -54,8 +54,8 @@ public class ShiroConfig {
         definition.addPathDefinition("/webjars/**", "anon");
         definition.addPathDefinition("/swagger-resources/**", "anon");
         definition.addPathDefinition("/v2/**", "anon");
+        definition.addPathDefinition("/user/doLogin", "anon");
         definition.addPathDefinition("/user/login", "anon");
-        definition.addPathDefinition("/login", "anon");
         definition.addPathDefinition("/**", "authc");
         return definition;
     }
