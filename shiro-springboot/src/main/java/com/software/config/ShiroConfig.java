@@ -1,5 +1,6 @@
 package com.software.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
@@ -90,5 +91,10 @@ public class ShiroConfig {
         //rememberMe
         definition.addPathDefinition("/**", "user");
         return definition;
+    }
+
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
     }
 }

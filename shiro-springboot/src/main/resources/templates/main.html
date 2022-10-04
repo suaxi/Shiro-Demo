@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>主页</title>
@@ -11,8 +11,8 @@
 <br>
 <a href="/logout">退出</a>
 <br>
-<a href="/user/hasRole">测试授权 - 角色验证</a>
+<a shiro:hasRole="admin" href="/user/hasRole">测试授权 - 角色验证</a>
 <br>
-<a href="/user/hasPermission">测试授权 - 权限验证</a>
+<a shiro:hasPermission="user:select, user:select" href="/user/hasPermission">测试授权 - 权限验证</a>
 </body>
 </html>
