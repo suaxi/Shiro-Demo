@@ -1,8 +1,11 @@
 package com.software.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import net.sf.ehcache.CacheManager;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
+import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -10,6 +13,9 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Wang Hao
@@ -46,6 +52,9 @@ public class ShiroConfig {
 
         //5.RememberMe
         securityManager.setRememberMeManager(cookieRememberMeManager());
+
+        //6.缓存管理
+        securityManager.setCacheManager(ehCacheManager());
         return securityManager;
     }
 
@@ -67,6 +76,24 @@ public class ShiroConfig {
         rememberMeManager.setCookie(simpleCookie);
         rememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
         return rememberMeManager;
+    }
+
+    /**
+     * 缓存管理器
+     *
+     * @return
+     */
+    public EhCacheManager ehCacheManager() {
+        EhCacheManager ehCacheManager = new EhCacheManager();
+        InputStream is = null;
+        try {
+            is = ResourceUtils.getInputStreamForPath("classpath:ehcache.xml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CacheManager cacheManager = new CacheManager(is);
+        ehCacheManager.setCacheManager(cacheManager);
+        return ehCacheManager;
     }
 
     /**
